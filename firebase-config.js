@@ -2,10 +2,10 @@
 // Replace the values below with your Firebase Web App configuration.
 
 export const firebaseConfig = {
-  apiKey: "PASTE_YOUR_FIREBASE_API_KEY_HERE",
-  authDomain: "PASTE_YOUR_FIREBASE_AUTH_DOMAIN_HERE",
-  projectId: "PASTE_YOUR_FIREBASE_PROJECT_ID_HERE",
-  storageBucket: "PASTE_YOUR_FIREBASE_STORAGE_BUCKET_HERE",
-  messagingSenderId: "PASTE_YOUR_FIREBASE_MESSAGING_SENDER_ID_HERE",
-  appId: "PASTE_YOUR_FIREBASE_APP_ID_HERE"
+  apiKey: "AIzaSyBTJFp09lahIdmQebfNz-j7t-mdq3GZqpY",
+  authDomain: "AIzaSyBTJFp09lahIdmQebfNz-j7t-mdq3GZqpY",
+  projectId: "fatis-palate",
+  storageBucket: "fatis-palate.firebasestorage.app",
+  messagingSenderId: "938699882614",
+  appId: "1:938699882614:web:61e43b4b9b97e2aeeadf57",
 };
