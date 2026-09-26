@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Account — Fatis Palate</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #090909;
+      --dark: #111111;
+      --dark-2: #181818;
+      --gold: #c9a96e;
+      --gold-light: #e1c78f;
+      --ivory: #f5f0e7;
+      --muted: #aaa49a;
+      --border: rgba(255,255,255,0.1);
+      --success: #7fc99a;
+      --error: #e08b8b;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--ivory);
+      font-family: "Inter", sans-serif;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    /* NAVBAR */
+
+    nav {
+      height: 80px;
+      padding: 0 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(9,9,9,0.9);
+      backdrop-filter: blur(18px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 30px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #c9c4ba;
+      font-size: 14px;
+      transition: 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold-light);
+    }
+
+    .account-link {
+      color: var(--gold-light) !important;
+    }
+
+    /* MAIN */
+
+    main {
+      min-height: calc(100vh - 80px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 70px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    main::before {
+      content: "";
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: rgba(201,169,110,0.07);
+      border-radius: 50%;
+      filter: blur(100px);
+      top: -250px;
+      left: -250px;
+    }
+
+    main::after {
+      content: "";
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: rgba(201,169,110,0.05);
+      border-radius: 50%;
+      filter: blur(100px);
+      bottom: -250px;
+      right: -200px;
+    }
+
+    .account-container {
+      width: 100%;
+      max-width: 1050px;
+      min-height: 650px;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      background: #101010;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 30px 100px rgba(0,0,0,0.5);
+    }
+
+    /* LEFT */
+
+    .visual {
+      position: relative;
+      padding: 55px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 650px;
+      background:
+        linear-gradient(
+          to top,
+          rgba(0,0,0,0.95),
+          rgba(0,0,0,0.15)
+        ),
+        url("https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1000&q=85")
+        center/cover;
+    }
+
+    .visual h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(45px, 5vw, 72px);
+      line-height: 0.95;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .visual p {
+      max-width: 350px;
+      color: #d0cbc2;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .gold-line {
+      width: 55px;
+      height: 1px;
+      background: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    /* RIGHT */
+
+    .form-section {
+      padding: 55px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-heading {
+      margin-bottom: 32px;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 10px;
+      margin-bottom: 10px;
+    }
+
+    .form-heading h2 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 42px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .form-heading p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* TABS */
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 25px;
+    }
+
+    .tab {
+      background: none;
+      border: none;
+      color: #777;
+      padding: 0 0 13px;
+      margin-right: 30px;
+      cursor: pointer;
+      font-size: 13px;
+      position: relative;
+    }
+
+    .tab.active {
+      color: var(--ivory);
+    }
+
+    .tab.active::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    /* FORMS */
+
+    .form {
+      display: none;
+    }
+
+    .form.active {
+      display: block;
+      animation: fadeIn 0.35s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    .field label {
+      display: block;
+      color: #aaa49a;
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+
+    .field input {
+      width: 100%;
+      background: #171717;
+      border: 1px solid rgba(255,255,255,0.09);
+      color: var(--ivory);
+      padding: 14px 15px;
+      border-radius: 9px;
+      outline: none;
+      transition: 0.25s ease;
+    }
+
+    .field input:focus {
+      border-color: rgba(201,169,110,0.7);
+      box-shadow: 0 0 0 3px rgba(201,169,110,0.06);
+    }
+
+    .password-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .password-row label {
+      margin: 0;
+    }
+
+    .forgot {
+      color: var(--gold);
+      font-size: 11px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .primary-btn {
+      width: 100%;
+      border: none;
+      background: var(--gold);
+      color: #111;
+      padding: 15px;
+      border-radius: 9px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 7px;
+      transition: 0.3s ease;
+    }
+
+    .primary-btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    .primary-btn:disabled {
+      opacity: 0.5;
+      cursor: wait;
+      transform: none;
+    }
+
+    .google-btn {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--ivory);
+      padding: 14px;
+      border-radius: 9px;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: 0.3s ease;
+    }
+
+    .google-btn:hover {
+      background: #181818;
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 19px 0;
+      color: #666;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .message {
+      min-height: 20px;
+      margin-top: 15px;
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .message.success {
+      color: var(--success);
+    }
+
+    .message.error {
+      color: var(--error);
+    }
+
+    /* ACCOUNT LOGGED IN */
+
+    .logged-in {
+      display: none;
+    }
+
+    .logged-in.active {
+      display: block;
+      animation: fadeIn 0.35s ease;
+    }
+
+    .user-card {
+      padding: 25px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #151515;
+      margin-bottom: 18px;
+    }
+
+    .user-avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 25px;
+      margin-bottom: 15px;
+    }
+
+    .user-card h3 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 28px;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+
+    .user-card p {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .account-actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    .secondary-btn {
+      width: 100%;
+      padding: 13px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--ivory);
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .secondary-btn:hover {
+      background: #171717;
+    }
+
+    .logout-btn {
+      color: #e08b8b;
+      border-color: rgba(224,139,139,0.25);
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 800px) {
+      .nav-links {
+        gap: 15px;
+      }
+
+      .nav-links a:nth-child(1),
+      .nav-links a:nth-child(2) {
+        display: none;
+      }
+
+      .account-container {
+        grid-template-columns: 1fr;
+      }
+
+      .visual {
+        min-height: 330px;
+        padding: 35px;
+      }
+
+      .visual h1 {
+        font-size: 50px;
+      }
+
+      .form-section {
+        padding: 35px 25px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      nav {
+        padding: 0 20px;
+      }
+
+      .logo {
+        font-size: 26px;
+      }
+
+      main {
+        padding: 30px 12px;
+      }
+
+      .account-container {
+        border-radius: 17px;
+      }
+
+      .visual {
+        min-height: 280px;
+        padding: 25px;
+      }
+
+      .form-heading h2 {
+        font-size: 36px;
+      }
+
+      .form-section {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">Fatis Palate</a>
+
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="order.html">Order</a>
+      <a href="account.html" class="account-link">Account</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <div class="account-container">
+
+      <!-- LEFT SIDE -->
+
+      <section class="visual">
+        <div>
+          <div class="gold-line"></div>
+
+          <h1>Your table<br>awaits.</h1>
+
+          <p>
+            Create your Fatis Palate account to make ordering easier,
+            track your orders, and enjoy a more personal dining experience.
+          </p>
+        </div>
+      </section>
+
+      <!-- RIGHT SIDE -->
+
+      <section class="form-section">
+
+        <div id="authArea">
+
+          <div class="form-heading">
+            <div class="eyebrow">Fatis Palate</div>
+
+            <h2 id="headingTitle">Welcome back.</h2>
+
+            <p id="headingText">
+              Sign in to continue your dining experience.
+            </p>
+          </div>
+
+          <div class="tabs">
+
+            <button
+              class="tab active"
+              id="loginTab"
+              type="button"
+            >
+              Sign In
+            </button>
+
+            <button
+              class="tab"
+              id="signupTab"
+              type="button"
+            >
+              Create Account
+            </button>
+
+          </div>
+
+          <!-- LOGIN -->
+
+          <form id="loginForm" class="form active">
+
+            <div class="field">
+              <label for="loginEmail">Email address</label>
+
+              <input
+                id="loginEmail"
+                type="email"
+                placeholder="you@example.com"
+                required
+              >
+            </div>
+
+            <div class="field">
+
+              <div class="password-row">
+                <label for="loginPassword">Password</label>
+
+                <button
+                  type="button"
+                  class="forgot"
+                  id="forgotPassword"
+                >
+                  Forgot password?
+                </button>
+              </div>
+
+              <input
+                id="loginPassword"
+                type="password"
+                placeholder="Your password"
+                required
+              >
+
+            </div>
+
+            <button
+              class="primary-btn"
+              id="loginButton"
+              type="submit"
+            >
+              Sign In
+            </button>
+
+            <div class="divider">or</div>
+
+            <button
+              class="google-btn"
+              id="googleButton"
+              type="button"
+            >
+              Continue with Google
+            </button>
+
+            <div id="loginMessage" class="message"></div>
+
+          </form>
+
+          <!-- SIGN UP -->
+
+          <form id="signupForm" class="form">
+
+            <div class="field">
+
+              <label for="signupName">
+                Full name
+              </label>
+
+              <input
+                id="signupName"
+                type="text"
+                placeholder="Your full name"
+                required
+              >
+
+            </div>
+
+            <div class="field">
+
+              <label for="signupPhone">
+                Phone number
+              </label>
+
+              <input
+                id="signupPhone"
+                type="tel"
+                placeholder="+234..."
+                required
+              >
+
+            </div>
+
+            <div class="field">
+
+              <label for="signupEmail">
+                Email address
+              </label>
+
+              <input
+                id="signupEmail"
+                type="email"
+                placeholder="you@example.com"
+                required
+              >
+
+            </div>
+
+            <div class="field">
+
+              <label for="signupPassword">
+                Password
+              </label>
+
+              <input
+                id="signupPassword"
+                type="password"
+                placeholder="At least 6 characters"
+                minlength="6"
+                required
+              >
+
+            </div>
+
+            <button
+              class="primary-btn"
+              id="signupButton"
+              type="submit"
+            >
+              Create Account
+            </button>
+
+            <div class="divider">or</div>
+
+            <button
+              class="google-btn"
+              id="googleSignupButton"
+              type="button"
+            >
+              Continue with Google
+            </button>
+
+            <div id="signupMessage" class="message"></div>
+
+          </form>
+
+        </div>
+
+        <!-- LOGGED IN AREA -->
+
+        <div id="loggedInArea" class="logged-in">
+
+          <div class="form-heading">
+
+            <div class="eyebrow">
+              Fatis Palate
+            </div>
+
+            <h2>Welcome back.</h2>
+
+            <p>
+              Your account is ready.
+            </p>
+
+          </div>
+
+          <div class="user-card">
+
+            <div class="user-avatar" id="userAvatar">
+              F
+            </div>
+
+            <h3 id="userName">
+              Fatis Palate Guest
+            </h3>
+
+            <p id="userEmail">
+              —
+            </p>
+
+          </div>
+
+          <div class="account-actions">
+
+            <a
+              href="menu.html"
+              class="secondary-btn"
+              style="text-align:center;"
+            >
+              Browse Menu
+            </a>
+
+            <a
+              href="order.html"
+              class="secondary-btn"
+              style="text-align:center;"
+            >
+              View Your Order
+            </a>
+
+            <button
+              class="secondary-btn logout-btn"
+              id="logoutButton"
+              type="button"
+            >
+              Sign Out
+            </button>
+
+          </div>
+
+          <div
+            id="loggedMessage"
+            class="message"
+          ></div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+  <!-- FIREBASE -->
+
+  <script type="module">
+
+    import { initializeApp } from
+      "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup,
+      sendPasswordResetEmail,
+      onAuthStateChanged,
+      signOut,
+      updateProfile
+    } from
+      "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc,
+      serverTimestamp
+    } from
+      "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+    import {
+      firebaseConfig
+    } from "./firebase/firebase-config.js";
+
+
+    /* INITIALIZE FIREBASE */
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getFirestore(app);
+
+
+    /* ELEMENTS */
+
+    const loginTab =
+      document.getElementById("loginTab");
+
+    const signupTab =
+      document.getElementById("signupTab");
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const signupForm =
+      document.getElementById("signupForm");
+
+    const headingTitle =
+      document.getElementById("headingTitle");
+
+    const headingText =
+      document.getElementById("headingText");
+
+    const authArea =
+      document.getElementById("authArea");
+
+    const loggedInArea =
+      document.getElementById("loggedInArea");
+
+
+    /* MESSAGE HELPERS */
+
+    function showMessage(elementId, message, type = "error") {
+
+      const element =
+        document.getElementById(elementId);
+
+      element.textContent = message;
+
+      element.className =
+        `message ${type}`;
+
+    }
+
+
+    function clearMessages() {
+
+      document
+        .querySelectorAll(".message")
+        .forEach(element => {
+
+          element.textContent = "";
+          element.className = "message";
+
+        });
+
+    }
+
+
+    /* TABS */
+
+    loginTab.addEventListener("click", () => {
+
+      loginTab.classList.add("active");
+      signupTab.classList.remove("active");
+
+      loginForm.classList.add("active");
+      signupForm.classList.remove("active");
+
+      headingTitle.textContent =
+        "Welcome back.";
+
+      headingText.textContent =
+        "Sign in to continue your dining experience.";
+
+      clearMessages();
+
+    });
+
+
+    signupTab.addEventListener("click", () => {
+
+      signupTab.classList.add("active");
+      loginTab.classList.remove("active");
+
+      signupForm.classList.add("active");
+      loginForm.classList.remove("active");
+
+      headingTitle.textContent =
+        "Join Fatis Palate.";
+
+      headingText.textContent =
+        "Create an account for a more personal dining experience.";
+
+      clearMessages();
+
+    });
+
+
+    /* SAVE CUSTOMER PROFILE */
+
+    async function saveCustomerProfile(user, extraData = {}) {
+
+      const userRef =
+        doc(db, "customers", user.uid);
+
+      const existingProfile =
+        await getDoc(userRef);
+
+      const profileData = {
+
+        uid: user.uid,
+
+        email: user.email || "",
+
+        name:
+          extraData.name ||
+          user.displayName ||
+          "",
+
+        phone:
+          extraData.phone ||
+          "",
+
+        photoURL:
+          user.photoURL ||
+          "",
+
+        updatedAt:
+          serverTimestamp()
+
+      };
+
+
+      if (!existingProfile.exists()) {
+
+        profileData.createdAt =
+          serverTimestamp();
+
+      }
+
+
+      await setDoc(
+        userRef,
+        profileData,
+        { merge: true }
+      );
+
+    }
+
+
+    /* LOGIN */
+
+    loginForm.addEventListener(
+      "submit",
+      async event => {
+
+        event.preventDefault();
+
+        const button =
+          document.getElementById("loginButton");
+
+        const email =
+          document.getElementById("loginEmail")
+            .value
+            .trim();
+
+        const password =
+          document.getElementById("loginPassword")
+            .value;
+
+        button.disabled = true;
+
+        button.textContent =
+          "Signing in...";
+
+        clearMessages();
+
+        try {
+
+          const credential =
+            await signInWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+
+          await saveCustomerProfile(
+            credential.user
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+          let message =
+            "Unable to sign in. Please try again.";
+
+          if (error.code ===
+            "auth/invalid-credential") {
+
+            message =
+              "The email or password is incorrect.";
+
+          } else if (
+            error.code ===
+            "auth/invalid-email"
+          ) {
+
+            message =
+              "Please enter a valid email address.";
+
+          } else if (
+            error.code ===
+            "auth/too-many-requests"
+          ) {
+
+            message =
+              "Too many attempts. Please try again later.";
+
+          }
+
+          showMessage(
+            "loginMessage",
+            message
+          );
+
+        } finally {
+
+          button.disabled = false;
+
+          button.textContent =
+            "Sign In";
+
+        }
+
+      }
+    );
+
+
+    /* CREATE ACCOUNT */
+
+    signupForm.addEventListener(
+      "submit",
+      async event => {
+
+        event.preventDefault();
+
+        const button =
+          document.getElementById("signupButton");
+
+        const name =
+          document.getElementById("signupName")
+            .value
+            .trim();
+
+        const phone =
+          document.getElementById("signupPhone")
+            .value
+            .trim();
+
+        const email =
+          document.getElementById("signupEmail")
+            .value
+            .trim();
+
+        const password =
+          document.getElementById("signupPassword")
+            .value;
+
+        button.disabled = true;
+
+        button.textContent =
+          "Creating account...";
+
+        clearMessages();
+
+        try {
+
+          const credential =
+            await createUserWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+
+
+          await updateProfile(
+            credential.user,
+            {
+              displayName: name
+            }
+          );
+
+
+          await saveCustomerProfile(
+            credential.user,
+            {
+              name,
+              phone
+            }
+          );
+
+
+          showMessage(
+            "signupMessage",
+            "Your account has been created.",
+            "success"
+          );
+
+
+        } catch (error) {
+
+          console.error(error);
+
+          let message =
+            "Unable to create your account.";
+
+          if (
+            error.code ===
+            "auth/email-already-in-use"
+          ) {
+
+            message =
+              "An account already exists with this email.";
+
+          } else if (
+            error.code ===
+            "auth/weak-password"
+          ) {
+
+            message =
+              "Your password must be at least 6 characters.";
+
+          } else if (
+            error.code ===
+            "auth/invalid-email"
+          ) {
+
+            message =
+              "Please enter a valid email address.";
+
+          }
+
+          showMessage(
+            "signupMessage",
+            message
+          );
+
+        } finally {
+
+          button.disabled = false;
+
+          button.textContent =
+            "Create Account";
+
+        }
+
+      }
+    );
+
+
+    /* GOOGLE LOGIN */
+
+    async function googleLogin() {
+
+      clearMessages();
+
+      const provider =
+        new GoogleAuthProvider();
+
+      try {
+
+        const credential =
+          await signInWithPopup(
+            auth,
+            provider
+          );
+
+        await saveCustomerProfile(
+          credential.user
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+          "loginMessage",
+          "Google sign-in could not be completed."
+        );
+
+      }
+
+    }
+
+
+    document
+      .getElementById("googleButton")
+      .addEventListener(
+        "click",
+        googleLogin
+      );
+
+
+    document
+      .getElementById("googleSignupButton")
+      .addEventListener(
+        "click",
+        googleLogin
+      );
+
+
+    /* PASSWORD RESET */
+
+    document
+      .getElementById("forgotPassword")
+      .addEventListener(
+        "click",
+        async () => {
+
+          const email =
+            document
+              .getElementById("loginEmail")
+              .value
+              .trim();
+
+          if (!email) {
+
+            showMessage(
+              "loginMessage",
+              "Enter your email address first."
+            );
+
+            return;
+
+          }
+
+
+          try {
+
+            await sendPasswordResetEmail(
+              auth,
+              email
+            );
+
+            showMessage(
+              "loginMessage",
+              "Password reset instructions have been sent to your email.",
+              "success"
+            );
+
+          } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+              "loginMessage",
+              "We couldn't send the password reset email."
+            );
+
+          }
+
+        }
+      );
+
+
+    /* LOGOUT */
+
+    document
+      .getElementById("logoutButton")
+      .addEventListener(
+        "click",
+        async () => {
+
+          try {
+
+            await signOut(auth);
+
+          } catch (error) {
+
+            console.error(error);
+
+          }
+
+        }
+      );
+
+
+    /* AUTH STATE */
+
+    onAuthStateChanged(
+      auth,
+      async user => {
+
+        if (user) {
+
+          authArea.style.display =
+            "none";
+
+          loggedInArea.classList.add(
+            "active"
+          );
+
+
+          let displayName =
+            user.displayName;
+
+
+          try {
+
+            const profile =
+              await getDoc(
+                doc(
+                  db,
+                  "customers",
+                  user.uid
+                )
+              );
+
+
+            if (profile.exists()) {
+
+              const data =
+                profile.data();
+
+              displayName =
+                data.name ||
+                displayName ||
+                "Fatis Palate Guest";
+
+            }
+
+          } catch (error) {
+
+            console.error(
+              "Profile loading error:",
+              error
+            );
+
+          }
+
+
+          document
+            .getElementById("userName")
+            .textContent =
+              displayName ||
+              "Fatis Palate Guest";
+
+
+          document
+            .getElementById("userEmail")
+            .textContent =
+              user.email ||
+              "No email";
+
+
+          const firstLetter =
+            (
+              displayName ||
+              user.email ||
+              "F"
+            )
+              .charAt(0)
+              .toUpperCase();
+
+
+          document
+            .getElementById("userAvatar")
+            .textContent =
+              firstLetter;
+
+
+        } else {
+
+          authArea.style.display =
+            "block";
+
+          loggedInArea.classList.remove(
+            "active"
+          );
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>

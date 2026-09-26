@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Payment | Fatis Palate</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top,
+          #29251d 0%,
+          #11100d 45%,
+          #070707 100%
+        );
+      color: #f5f0e7;
+      font-family: "Inter", sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 620px;
+      padding: 55px 35px;
+      text-align: center;
+
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(213,181,111,0.22);
+      border-radius: 28px;
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      box-shadow:
+        0 30px 90px rgba(0,0,0,0.5);
+    }
+
+    .logo {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 42px;
+      font-weight: 600;
+      color: #d8bd7b;
+      margin-bottom: 35px;
+    }
+
+    .icon {
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 28px;
+
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 38px;
+
+      background: rgba(216,189,123,0.12);
+      border: 1px solid rgba(216,189,123,0.3);
+    }
+
+    h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 48px;
+      margin-bottom: 14px;
+    }
+
+    p {
+      color: #aaa49a;
+      line-height: 1.7;
+      font-size: 15px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 32px;
+      padding: 15px 28px;
+
+      border-radius: 999px;
+
+      background: #d8bd7b;
+      color: #111;
+
+      text-decoration: none;
+      font-weight: 600;
+
+      transition: 0.25s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(216,189,123,0.2);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .spinner {
+      width: 42px;
+      height: 42px;
+
+      border-radius: 50%;
+
+      border: 3px solid rgba(216,189,123,0.2);
+      border-top-color: #d8bd7b;
+
+      animation: spin 0.8s linear infinite;
+
+      margin: 0 auto 28px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .order-id {
+      margin-top: 22px;
+      font-size: 13px;
+      color: #777168;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 45px 22px;
+      }
+
+      .logo {
+        font-size: 36px;
+      }
+
+      h1 {
+        font-size: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="card">
+
+    <div class="logo">
+      Fatis Palate
+    </div>
+
+    <!-- PROCESSING -->
+
+    <section id="processing">
+
+      <div class="spinner"></div>
+
+      <h1>
+        Verifying payment
+      </h1>
+
+      <p>
+        Please wait while we securely confirm
+        your payment with Flutterwave.
+      </p>
+
+    </section>
+
+
+    <!-- SUCCESS -->
+
+    <section
+      id="success"
+      class="hidden"
+    >
+
+      <div class="icon">
+        ✓
+      </div>
+
+      <h1>
+        Payment confirmed
+      </h1>
+
+      <p>
+        Your payment has been successfully
+        verified. Your Fatis Palate order has
+        been received.
+      </p>
+
+      <div
+        id="successOrderId"
+        class="order-id"
+      ></div>
+
+      <a
+        href="index.html"
+        class="button"
+      >
+        Back to Fatis Palate
+      </a>
+
+    </section>
+
+
+    <!-- FAILED -->
+
+    <section
+      id="failed"
+      class="hidden"
+    >
+
+      <div class="icon">
+        !
+      </div>
+
+      <h1>
+        Payment not confirmed
+      </h1>
+
+      <p id="failedMessage">
+        We couldn't confirm this payment.
+        Please contact Fatis Palate if money
+        was deducted from your account.
+      </p>
+
+      <a
+        href="order.html"
+        class="button"
+      >
+        Return to Order
+      </a>
+
+    </section>
+
+  </main>
+
+
+  <script type="module">
+
+    import {
+      getFirestore,
+      doc,
+      getDoc
+    }
+    from
+    "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+    import {
+      firebaseConfig
+    }
+    from "./firebase/firebase-config.js";
+
+
+    const {
+      initializeApp
+    }
+    = await import(
+      "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js"
+    );
+
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const db =
+      getFirestore(app);
+
+
+    const processing =
+      document.getElementById("processing");
+
+    const success =
+      document.getElementById("success");
+
+    const failed =
+      document.getElementById("failed");
+
+    const failedMessage =
+      document.getElementById("failedMessage");
+
+    const successOrderId =
+      document.getElementById("successOrderId");
+
+
+    function showSuccess(orderId) {
+
+      processing.classList.add("hidden");
+
+      failed.classList.add("hidden");
+
+      success.classList.remove("hidden");
+
+      successOrderId.textContent =
+        `Order ID: ${orderId}`;
+
+    }
+
+
+    function showFailed(message) {
+
+      processing.classList.add("hidden");
+
+      success.classList.add("hidden");
+
+      failed.classList.remove("hidden");
+
+      failedMessage.textContent =
+        message ||
+        "We couldn't confirm this payment. Please contact Fatis Palate if money was deducted from your account.";
+
+    }
+
+
+    async function verifyPayment() {
+
+      try {
+
+        const params =
+          new URLSearchParams(
+            window.location.search
+          );
+
+
+        const transactionId =
+          params.get("transaction_id");
+
+        const txRef =
+          params.get("tx_ref");
+
+        const status =
+          params.get("status");
+
+
+        const pendingRaw =
+          localStorage.getItem(
+            "fatisPalatePendingOrder"
+          );
+
+
+        if (!pendingRaw) {
+
+          showFailed(
+            "We couldn't find the pending order associated with this payment."
+          );
+
+          return;
+        }
+
+
+        const pending =
+          JSON.parse(pendingRaw);
+
+
+        const orderId =
+          pending.orderId;
+
+
+        if (!orderId) {
+
+          showFailed(
+            "The order information is incomplete."
+          );
+
+          return;
+        }
+
+
+        /*
+          Flutterwave Standard redirects with
+          status, tx_ref and transaction_id.
+        */
+
+        if (
+          !transactionId ||
+          !txRef
+        ) {
+
+          /*
+            If the redirect did not include
+            the required transaction details,
+            check whether the order was already
+            marked paid by another verification
+            path.
+          */
+
+          const orderSnapshot =
+            await getDoc(
+              doc(
+                db,
+                "orders",
+                orderId
+              )
+            );
+
+
+          if (
+            orderSnapshot.exists() &&
+            orderSnapshot.data().paymentStatus === "paid"
+          ) {
+
+            localStorage.removeItem(
+              "fatisPalateCart"
+            );
+
+            localStorage.removeItem(
+              "fatisPalatePendingOrder"
+            );
+
+            showSuccess(orderId);
+
+            return;
+          }
+
+
+          showFailed(
+            "Flutterwave did not return the information needed to verify this payment."
+          );
+
+          return;
+        }
+
+
+        if (
+          status &&
+          status !== "successful"
+        ) {
+
+          showFailed(
+            "Flutterwave reported that this payment was not successful."
+          );
+
+          return;
+        }
+
+
+        const response =
+          await fetch(
+            "/api/verify-payment",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                orderId,
+                transactionId,
+                txRef
+              })
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          response.ok &&
+          data.success &&
+          data.paid
+        ) {
+
+          localStorage.removeItem(
+            "fatisPalateCart"
+          );
+
+          localStorage.removeItem(
+            "fatisPalatePendingOrder"
+          );
+
+          showSuccess(orderId);
+
+          return;
+        }
+
+
+        showFailed(
+          data.message ||
+          "We couldn't verify this payment."
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Payment verification page error:",
+          error
+        );
+
+        showFailed(
+          "Something went wrong while verifying your payment. Please try again shortly."
+        );
+
+      }
+
+    }
+
+
+    verifyPayment();
+
+  </script>
+
+</body>
+</html>

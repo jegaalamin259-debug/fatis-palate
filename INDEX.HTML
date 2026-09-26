@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Fatis Palate | Gourmet House</title>
+
+  <meta
+    name="description"
+    content="Fatis Palate — a refined gourmet dining experience where exceptional food meets beautiful moments."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --cream: #f5efe5;
+      --cream-light: #fbf8f2;
+      --brown: #241b16;
+      --brown-light: #3a2b23;
+      --gold: #b89452;
+      --gold-light: #d5b777;
+      --white: #ffffff;
+      --muted: #8b8178;
+      --border: rgba(36, 27, 22, 0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background: var(--cream-light);
+      color: var(--brown);
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    /* =========================
+       LOADING SCREEN
+    ========================= */
+
+    .loader {
+      position: fixed;
+      inset: 0;
+      background: var(--brown);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition:
+        opacity 0.8s ease,
+        visibility 0.8s ease;
+    }
+
+    .loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-content {
+      text-align: center;
+      color: var(--cream);
+    }
+
+    .loader-logo {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(3rem, 9vw, 6rem);
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      animation: logoReveal 1.2s ease forwards;
+    }
+
+    .loader-subtitle {
+      margin-top: 8px;
+      color: var(--gold-light);
+      font-size: 0.72rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      animation: fadeUp 1s ease 0.3s both;
+    }
+
+    @keyframes logoReveal {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* =========================
+       NAVIGATION
+    ========================= */
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 82px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6vw;
+      color: var(--white);
+      transition:
+        background 0.4s ease,
+        backdrop-filter 0.4s ease,
+        height 0.4s ease;
+    }
+
+    .navbar.scrolled {
+      height: 70px;
+      background: rgba(36, 27, 22, 0.93);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+
+    .brand-main {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-small {
+      margin-top: 4px;
+      color: var(--gold-light);
+      font-size: 0.55rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+    }
+
+    .nav-links a {
+      position: relative;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.88;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -8px;
+      width: 0;
+      height: 1px;
+      background: var(--gold-light);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-reserve {
+      padding: 12px 19px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition:
+        background 0.3s ease,
+        color 0.3s ease;
+    }
+
+    .nav-reserve:hover {
+      background: var(--white);
+      color: var(--brown);
+    }
+
+    .menu-toggle {
+      display: none;
+      border: 0;
+      background: transparent;
+      color: var(--white);
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 26px;
+      height: 1px;
+      background: currentColor;
+      margin: 6px 0;
+      transition: transform 0.3s ease;
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background:
+        linear-gradient(
+          90deg,
+          rgba(18, 12, 8, 0.86) 0%,
+          rgba(18, 12, 8, 0.57) 48%,
+          rgba(18, 12, 8, 0.2) 100%
+        ),
+        url("https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=2200&q=90")
+        center / cover;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(
+          circle at 80% 30%,
+          rgba(212, 183, 119, 0.13),
+          transparent 30%
+        );
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: min(900px, 88%);
+      margin-left: 8vw;
+      padding-top: 70px;
+      color: var(--white);
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--gold-light);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      animation: fadeUp 1s ease 0.9s both;
+    }
+
+    .hero-eyebrow::before {
+      content: "";
+      width: 46px;
+      height: 1px;
+      background: var(--gold-light);
+    }
+
+    .hero h1 {
+      max-width: 850px;
+      margin-top: 22px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(4rem, 8.5vw, 8rem);
+      font-weight: 500;
+      line-height: 0.86;
+      letter-spacing: -0.035em;
+      animation: fadeUp 1s ease 1s both;
+    }
+
+    .hero h1 em {
+      color: var(--gold-light);
+      font-weight: 400;
+    }
+
+    .hero-description {
+      max-width: 540px;
+      margin-top: 30px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
+      line-height: 1.8;
+      animation: fadeUp 1s ease 1.15s both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 38px;
+      animation: fadeUp 1s ease 1.3s both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 27px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      transition:
+        transform 0.3s ease,
+        background 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+    }
+
+    .btn-outline {
+      border-color: rgba(255, 255, 255, 0.45);
+      color: var(--white);
+    }
+
+    .btn-outline:hover {
+      background: var(--white);
+      color: var(--brown);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 34px;
+      left: 8vw;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .scroll-line {
+      width: 55px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-line::after {
+      content: "";
+      position: absolute;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--gold-light);
+      animation: scrollLine 2s infinite ease-in-out;
+    }
+
+    @keyframes scrollLine {
+      0% {
+        left: -100%;
+      }
+
+      50%,
+      100% {
+        left: 100%;
+      }
+    }
+
+    /* =========================
+       INTRO
+    ========================= */
+
+    .section {
+      padding: 120px 8vw;
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 8vw;
+      align-items: center;
+      background: var(--cream-light);
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--gold);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    .section-label::before {
+      content: "";
+      width: 35px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .intro h2 {
+      margin-top: 22px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 500;
+      line-height: 0.96;
+      letter-spacing: -0.025em;
+    }
+
+    .intro-text p {
+      max-width: 620px;
+      color: #655b53;
+      font-size: 1rem;
+      line-height: 1.9;
+    }
+
+    .intro-text p + p {
+      margin-top: 18px;
+    }
+
+    .signature {
+      margin-top: 28px;
+      font-family: "Cormorant Garamond", serif;
+      color: var(--gold);
+      font-size: 1.6rem;
+      font-style: italic;
+    }
+
+    /* =========================
+       EXPERIENCE
+    ========================= */
+
+    .experience {
+      position: relative;
+      background: var(--brown);
+      color: var(--cream);
+      overflow: hidden;
+    }
+
+    .experience::before {
+      content: "FATIS";
+      position: absolute;
+      right: -60px;
+      top: 40px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 18rem;
+      line-height: 1;
+      color: rgba(255, 255, 255, 0.025);
+      pointer-events: none;
+    }
+
+    .experience-header {
+      max-width: 760px;
+    }
+
+    .experience .section-label {
+      color: var(--gold-light);
+    }
+
+    .experience .section-label::before {
+      background: var(--gold-light);
+    }
+
+    .experience-header h2 {
+      margin-top: 20px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      font-weight: 500;
+      line-height: 0.95;
+    }
+
+    .experience-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 70px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .experience-card {
+      padding: 45px 28px 35px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      transition: transform 0.4s ease;
+    }
+
+    .experience-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .experience-number {
+      color: var(--gold-light);
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.2rem;
+    }
+
+    .experience-card h3 {
+      margin-top: 22px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 2rem;
+      font-weight: 500;
+    }
+
+    .experience-card p {
+      margin-top: 14px;
+      max-width: 320px;
+      color: rgba(245, 239, 229, 0.64);
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+
+    /* =========================
+       MENU PREVIEW
+    ========================= */
+
+    .menu-section {
+      background: var(--cream);
+    }
+
+    .menu-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .menu-header h2 {
+      margin-top: 18px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(3.2rem, 5vw, 5.4rem);
+      font-weight: 500;
+      line-height: 0.9;
+    }
+
+    .menu-header p {
+      max-width: 380px;
+      color: #756b63;
+      font-size: 0.92rem;
+      line-height: 1.8;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 65px;
+    }
+
+    .menu-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--white);
+    }
+
+    .menu-image {
+      height: 370px;
+      overflow: hidden;
+    }
+
+    .menu-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+
+    .menu-card:hover .menu-image img {
+      transform: scale(1.06);
+    }
+
+    .menu-info {
+      padding: 24px 22px 27px;
+    }
+
+    .menu-category {
+      color: var(--gold);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .menu-info h3 {
+      margin-top: 8px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .menu-info p {
+      margin-top: 8px;
+      color: #7d746c;
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    /* =========================
+       CTA
+    ========================= */
+
+    .cta {
+      position: relative;
+      min-height: 580px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background:
+        linear-gradient(
+          90deg,
+          rgba(36, 27, 22, 0.92),
+          rgba(36, 27, 22, 0.55)
+        ),
+        url("https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=2200&q=90")
+        center / cover;
+      color: var(--white);
+    }
+
+    .cta-content {
+      width: min(750px, 90%);
+      margin-left: 8vw;
+    }
+
+    .cta h2 {
+      margin-top: 18px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(3.5rem, 6vw, 6rem);
+      font-weight: 500;
+      line-height: 0.9;
+    }
+
+    .cta p {
+      max-width: 500px;
+      margin-top: 24px;
+      color: rgba(255, 255, 255, 0.76);
+      line-height: 1.8;
+    }
+
+    .cta .btn {
+      margin-top: 30px;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      background: #19120e;
+      color: var(--cream);
+      padding: 75px 8vw 30px;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.4fr 0.8fr 0.8fr;
+      gap: 70px;
+      padding-bottom: 65px;
+    }
+
+    .footer-brand h3 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 3rem;
+      font-weight: 500;
+    }
+
+    .footer-brand p {
+      max-width: 360px;
+      margin-top: 14px;
+      color: rgba(245, 239, 229, 0.56);
+      font-size: 0.82rem;
+      line-height: 1.8;
+    }
+
+    .footer-column h4 {
+      color: var(--gold-light);
+      font-size: 0.66rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .footer-column a {
+      display: block;
+      width: fit-content;
+      margin-top: 15px;
+      color: rgba(245, 239, 229, 0.7);
+      font-size: 0.82rem;
+      transition: color 0.3s ease;
+    }
+
+    .footer-column a:hover {
+      color: var(--white);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255, 255, 255, 0.09);
+      color: rgba(245, 239, 229, 0.4);
+      font-size: 0.68rem;
+    }
+
+    /* =========================
+       REVEAL ANIMATION
+    ========================= */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(35px);
+      transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 900px) {
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: min(340px, 82%);
+        height: 100vh;
+        padding: 110px 35px 40px;
+        flex-direction: column;
+        align-items: flex-start;
+        background: var(--brown);
+        transition: right 0.4s ease;
+      }
+
+      .nav-links.open {
+        right: 0;
+      }
+
+      .nav-links a {
+        font-size: 0.9rem;
+      }
+
+      .menu-toggle {
+        display: block;
+        position: relative;
+        z-index: 10;
+      }
+
+      .intro {
+        grid-template-columns: 1fr;
+        gap: 45px;
+      }
+
+      .experience-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-top {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-brand {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        padding: 0 5vw;
+      }
+
+      .brand-main {
+        font-size: 1.7rem;
+      }
+
+      .hero-content,
+      .cta-content {
+        margin-left: 5vw;
+      }
+
+      .hero h1 {
+        font-size: clamp(3.5rem, 17vw, 5.2rem);
+      }
+
+      .hero-description {
+        font-size: 0.9rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        width: 190px;
+      }
+
+      .hero-scroll {
+        left: 5vw;
+      }
+
+      .section {
+        padding: 85px 5vw;
+      }
+
+      .menu-header {
+        display: block;
+      }
+
+      .menu-header p {
+        margin-top: 25px;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-image {
+        height: 330px;
+      }
+
+      .cta {
+        min-height: 550px;
+      }
+
+      .footer-top {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .footer-brand {
+        grid-column: auto;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       LOADING SCREEN
+  ========================== -->
+
+  <div class="loader" id="loader">
+    <div class="loader-content">
+      <div class="loader-logo">Fatis Palate</div>
+      <div class="loader-subtitle">Gourmet House</div>
+    </div>
+  </div>
+
+
+  <!-- =========================
+       NAVIGATION
+  ========================== -->
+
+  <header class="navbar" id="navbar">
+
+    <a href="#" class="brand">
+      <span class="brand-main">Fatis Palate</span>
+      <span class="brand-small">Gourmet House</span>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#story">Our Story</a>
+      <a href="#experience">Experience</a>
+      <a href="#menu">Menu</a>
+      <a href="#contact" class="nav-reserve">Reserve</a>
+    </nav>
+
+    <button
+      class="menu-toggle"
+      id="menuToggle"
+      aria-label="Open navigation menu"
+    >
+      <span></span>
+      <span></span>
+    </button>
+
+  </header>
+
+
+  <!-- =========================
+       HERO
+  ========================== -->
+
+  <main>
+
+    <section class="hero" id="home">
+
+      <div class="hero-content">
+
+        <div class="hero-eyebrow">
+          Welcome to Fatis Palate
+        </div>
+
+        <h1>
+          Taste the
+          <em>extraordinary.</em>
+        </h1>
+
+        <p class="hero-description">
+          A refined dining experience where carefully crafted cuisine,
+          beautiful presentation and unforgettable moments come together.
+        </p>
+
+        <div class="hero-actions">
+
+          <a href="#menu" class="btn btn-primary">
+            Explore Menu
+          </a>
+
+          <a href="#contact" class="btn btn-outline">
+            Reserve a Table
+          </a>
+
+        </div>
+
+      </div>
+
+      <div class="hero-scroll">
+        <span class="scroll-line"></span>
+        Scroll to discover
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         STORY
+    ========================== -->
+
+    <section class="section intro" id="story">
+
+      <div class="reveal">
+
+        <div class="section-label">
+          Our Story
+        </div>
+
+        <h2>
+          Food made with
+          intention.
+        </h2>
+
+      </div>
+
+      <div class="intro-text reveal">
+
+        <p>
+          At Fatis Palate, dining is more than simply enjoying a meal.
+          It is about bringing together flavour, atmosphere and thoughtful
+          hospitality to create an experience worth remembering.
+        </p>
+
+        <p>
+          From carefully selected ingredients to beautiful presentation,
+          every detail is considered with the goal of making each visit
+          feel special.
+        </p>
+
+        <div class="signature">
+          — Fatis Palate
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         EXPERIENCE
+    ========================== -->
+
+    <section class="section experience" id="experience">
+
+      <div class="experience-header reveal">
+
+        <div class="section-label">
+          The Experience
+        </div>
+
+        <h2>
+          More than a meal.
+          <br>
+          An experience.
+        </h2>
+
+      </div>
+
+      <div class="experience-grid">
+
+        <article class="experience-card reveal">
+
+          <div class="experience-number">
+            01
+          </div>
+
+          <h3>
+            Crafted Cuisine
+          </h3>
+
+          <p>
+            Thoughtfully prepared dishes designed around flavour,
+            quality and presentation.
+          </p>
+
+        </article>
+
+
+        <article class="experience-card reveal">
+
+          <div class="experience-number">
+            02
+          </div>
+
+          <h3>
+            Warm Hospitality
+          </h3>
+
+          <p>
+            A welcoming environment where great food is matched
+            by attentive service.
+          </p>
+
+        </article>
+
+
+        <article class="experience-card reveal">
+
+          <div class="experience-number">
+            03
+          </div>
+
+          <h3>
+            Memorable Moments
+          </h3>
+
+          <p>
+            Whether it is dinner, celebration or a simple gathering,
+            every visit should leave a lasting impression.
+          </p>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         MENU
+    ========================== -->
+
+    <section class="section menu-section" id="menu">
+
+      <div class="menu-header reveal">
+
+        <div>
+
+          <div class="section-label">
+            From Our Kitchen
+          </div>
+
+          <h2>
+            A taste of
+            <br>
+            what's to come.
+          </h2>
+
+        </div>
+
+        <p>
+          Explore a selection of dishes representing the style and
+          experience of Fatis Palate. The complete menu can be added
+          to the ordering system in the next stage.
+        </p>
+
+      </div>
+
+
+      <div class="menu-grid">
+
+        <article class="menu-card reveal">
+
+          <div class="menu-image">
+            <img
+              src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=85"
+              alt="Beautifully prepared gourmet dish"
+            />
+          </div>
+
+          <div class="menu-info">
+
+            <div class="menu-category">
+              Signature
+            </div>
+
+            <h3>
+              Chef's Special
+            </h3>
+
+            <p>
+              A carefully prepared signature dish inspired by
+              the kitchen's creative approach.
+            </p>
+
+          </div>
+
+        </article>
+
+
+        <article class="menu-card reveal">
+
+          <div class="menu-image">
+            <img
+              src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=85"
+              alt="Fresh gourmet food"
+            />
+          </div>
+
+          <div class="menu-info">
+
+            <div class="menu-category">
+              Favourites
+            </div>
+
+            <h3>
+              House Favourite
+            </h3>
+
+            <p>
+              A comforting plate created to bring bold flavours
+              and satisfying textures together.
+            </p>
+
+          </div>
+
+        </article>
+
+
+        <article class="menu-card reveal">
+
+          <div class="menu-image">
+            <img
+              src="https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=85"
+              alt="Restaurant dining experience"
+            />
+          </div>
+
+          <div class="menu-info">
+
+            <div class="menu-category">
+              Experience
+            </div>
+
+            <h3>
+              Gourmet Selection
+            </h3>
+
+            <p>
+              An elegant selection designed for guests looking
+              for something a little different.
+            </p>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         CTA
+    ========================== -->
+
+    <section class="cta" id="contact">
+
+      <div class="cta-content reveal">
+
+        <div class="section-label">
+          Your Table Awaits
+        </div>
+
+        <h2>
+          Make your next
+          <br>
+          meal memorable.
+        </h2>
+
+        <p>
+          Discover the Fatis Palate experience and enjoy food,
+          atmosphere and hospitality brought together in one place.
+        </p>
+
+        <a href="#menu" class="btn btn-primary">
+          View Our Menu
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+
+  <footer>
+
+    <div class="footer-top">
+
+      <div class="footer-brand">
+
+        <h3>
+          Fatis Palate
+        </h3>
+
+        <p>
+          Gourmet food, thoughtful hospitality and memorable
+          experiences — all under one roof.
+        </p>
+
+      </div>
+
+
+      <div class="footer-column">
+
+        <h4>
+          Explore
+        </h4>
+
+        <a href="#home">Home</a>
+        <a href="#story">Our Story</a>
+        <a href="#experience">Experience</a>
+        <a href="#menu">Menu</a>
+
+      </div>
+
+
+      <div class="footer-column">
+
+        <h4>
+          Visit
+        </h4>
+
+        <a href="#contact">Reservations</a>
+        <a href="#contact">Contact</a>
+        <a href="#menu">Order Online</a>
+
+      </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+      <span>
+        © 2026 Fatis Palate. All rights reserved.
+      </span>
+
+      <span>
+        Gourmet House
+      </span>
+
+    </div>
+
+  </footer>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
+
+  <script>
+
+    // Loading screen
+    window.addEventListener("load", () => {
+
+      setTimeout(() => {
+
+        document
+          .getElementById("loader")
+          .classList.add("hidden");
+
+      }, 900);
+
+    });
+
+
+    // Navbar scroll effect
+    const navbar = document.getElementById("navbar");
+
+    window.addEventListener("scroll", () => {
+
+      if (window.scrollY > 50) {
+
+        navbar.classList.add("scrolled");
+
+      } else {
+
+        navbar.classList.remove("scrolled");
+
+      }
+
+    });
+
+
+    // Mobile navigation
+    const menuToggle = document.getElementById("menuToggle");
+    const navLinks = document.getElementById("navLinks");
+
+    menuToggle.addEventListener("click", () => {
+
+      navLinks.classList.toggle("open");
+
+    });
+
+
+    // Close mobile navigation when a link is clicked
+    document.querySelectorAll(".nav-links a").forEach((link) => {
+
+      link.addEventListener("click", () => {
+
+        navLinks.classList.remove("open");
+
+      });
+
+    });
+
+
+    // Scroll reveal animations
+    const revealElements =
+      document.querySelectorAll(".reveal");
+
+    const revealObserver =
+      new IntersectionObserver(
+        (entries) => {
+
+          entries.forEach((entry) => {
+
+            if (entry.isIntersecting) {
+
+              entry.target.classList.add("visible");
+
+              revealObserver.unobserve(entry.target);
+
+            }
+
+          });
+
+        },
+        {
+          threshold: 0.12
+        }
+      );
+
+
+    revealElements.forEach((element) => {
+
+      revealObserver.observe(element);
+
+    });
+
+  </script>
+
+</body>
+</html>
